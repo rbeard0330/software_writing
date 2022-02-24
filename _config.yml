@@ -1,0 +1,11 @@
+title: Robert Beard's blog
+theme: midnight
+author: Robert Beard
+email: robert.a.beard@gmail.com
+description: >
+  This is the personal software blog of Robert Beard
+# social links
+twitter_username: rbeard0330 # DO NOT include the @ character, or else the build will fail!
+github_username:  rbeard0330 # DO NOT include the @ character, or else the build will fail!
+
+show_excerpts: true # set to false to remove excerpts on the homepage

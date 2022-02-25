@@ -375,13 +375,14 @@ header .container .menu {
 .icon {
   width: 20px;
   height: 20px;
+  color: white;
 }
 
-.title {
+#title {
   display: flex;
 }
 
-.title > .menu {
+#title > .menu {
   margin-left: auto;
   display: flex;
 }

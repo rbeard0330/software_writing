@@ -376,3 +376,15 @@ header .container .menu {
   width: 20px;
   height: 20px;
 }
+
+.title {
+  display: flex;
+}
+
+.title > .menu {
+  margin-left: auto;
+  display: flex;
+}
+nav {
+  display: flex;
+}

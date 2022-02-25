@@ -7,8 +7,7 @@ permalink: /writing/
 <ul>
     {% for post in site.posts %}
     <li class="blog-entry">
-        <span>{% raw %}
-            <!-- Whitespace added for code readability -->
+        <span>
       {% assign d = post.date | date: "%d" | plus:'0' %}
       {% assign m = post.date | date: "%B" %}
 
@@ -23,8 +22,7 @@ permalink: /writing/
         {% when 3 or 23 %}{{ d }}rd
         {% else %}{{ d }}th
         {% endcase %},
-      {{ page.date | date: "%Y" }}
-      {% endraw %}</span>
+      {{ page.date | date: "%Y" }}</span>
         <a href="{{site.baseurl}}{{ post.url }}">{{ post.title }}</a>
     </li>
     {% endfor %}

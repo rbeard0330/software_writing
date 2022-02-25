@@ -380,15 +380,17 @@ header .container .menu {
 
 #title {
   display: flex;
-  justify-content: center;
+  align-items: center;
 }
 
 #title > .menu {
   margin-left: auto;
   display: flex;
+  align-items: center;
 }
 nav > ul {
   display: flex;
+  align-items: center;
 }
 
 #title a {

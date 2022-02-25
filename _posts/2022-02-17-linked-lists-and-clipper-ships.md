@@ -176,7 +176,7 @@ pub fn vec_sort(numbers: &Vec<Int>) -> Vec<Int> {
 
 ### Results
 
-![Bench results]({{"images/clipper_ships/lines.svg" | relative_url}})
+![Bench results]({{"assets/svg/linked-list-benches.svg" | relative_url}})
 
 Benchmarking the two sorting functions on a variety of list sizes validates the conventional wisdom, with the `Vec` implementation 15-50 times as fast as the `LinkedList`.
 

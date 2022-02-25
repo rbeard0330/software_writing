@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 date: 2022-02-17
 title: "Linked Lists and Clipper Ships"
 ---

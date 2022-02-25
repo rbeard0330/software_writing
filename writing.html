@@ -6,8 +6,9 @@ permalink: /writing/
 
 <ul>
     {% for post in site.posts %}
-    <li>
-        <a href="{{site.baseurl}}/{{ post.url }}">{{ post.title }}</a>
+    <li class="blog-entry">
+        <span>{{post.date}}</span>
+        <a href="{{site.baseurl}}{{ post.url }}">{{ post.title }}</a>
     </li>
     {% endfor %}
 </ul>

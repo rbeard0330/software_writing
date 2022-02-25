@@ -380,6 +380,7 @@ header .container .menu {
 
 #title {
   display: flex;
+  justify-content: center;
 }
 
 #title > .menu {
@@ -393,3 +394,8 @@ nav > ul {
 #title a {
   margin-left: 1em;
   }
+
+li.blog-entry {
+  display: flex;
+  margin-right: 2em;
+}

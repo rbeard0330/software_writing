@@ -376,7 +376,7 @@ header .container .menu {
   width: 20px;
   height: 20px;
   color: white;
-  margin-left: 8px;
+  margin-left: 5px;
 }
 
 #title {
@@ -394,9 +394,13 @@ nav, nav > ul {
   align-items: center;
 }
 
+#title nav {
+  margin-left: 2em;
+  margin-right: 1em;
+}
+
 #title li {
   margin-left: 1em;
-
   }
 
 #title ul {

@@ -376,6 +376,7 @@ header .container .menu {
   width: 20px;
   height: 20px;
   color: white;
+  margin-left: 8px;
 }
 
 #title {
@@ -395,8 +396,12 @@ nav, nav > ul {
 
 #title li {
   margin-left: 1em;
-  margin-bottom: 0;
+
   }
+
+#title ul {
+  margin-bottom: 0;
+}
 
 li.blog-entry {
   display: flex;

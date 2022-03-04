@@ -66,11 +66,11 @@ What have we accomplished?  So far, nothing.  This is still an O(n<sup>3</sup>) 
 ```
 All we've done is swap the outer two loops.  This is less efficient on average, because we can't return early as soon as we find a square, but it doesn't affect the worst-case runtime, and it's just a thought experiment.   Now, let's look at the table entries consulted in the first two iterations of the outer loop.
 
-![Table entry access pattern](/assets/jpg/algorithm_1.jpg)
+![Table entry access pattern]({{ site.baseurl }}/assets/jpg/algorithm_1.jpg)
 
 For the first point considered (orange, labeled with a 1), the table entry corresponding to the point being studied is consulted for each possible square.  Then in each iteration of the inner loop, the yellow entries labelled `1a`, `1b`, etc., are consulted in order. On the next pass of the outer loop, the orange entry labelled 2 is consulted, and the corresponding yellow entries are looked at in a similar order.  Now let's skip ahead to the iteration #7 of the outer loop.
 
-![Table entry access pattern on diagonal](/assets/jpg/algorithm_3.jpg)
+![Table entry access pattern on diagonal]({{ site.baseurl }}/assets/jpg/algorithm_3.jpg)
 
 This picture highlights an important element of the problem's structure.  For any square whose top-left or bottom-right corner lies on a particular diagonal, all the information we need to know is embedded in that diagonal of our table. This makes sense if we think about our modified precomputation table.  One of the numbers in each cell of the table stores the length of the shorter consecutive run of pixels going in the down or right directions, and the other stores the same figure for up and left.  Geometrically, this number is the leg length of an L-shape with equal legs whose vertex is situated on that point of the grid and opening down/right or up/left, as the case may be.  If we imagine two such shapes positioned on a diagonal, the significance becomes clear.  If you move two L-shapes towards each other, they form a square the moment the legs on the shorter L-shape touch the legs of the larger one, which occurs when they are separated by an x- or y-distance equal to the leg length.
 
@@ -88,7 +88,7 @@ We can use these ideas to reshuffle our algorithm once again:
 ## Eliminating impossible squares
 We still haven't accomplished anything though--this algorithm is stubbornly cubic.  We haven't extracted enough structure from the problem.  We're still basically testing all `P`/`Q` pairs on a given diagonal.  We save a little time by skipping `Q` candidates that are outside the arms of `P`'s `L`, but that doesn't affect the asymptotic running time.  We also need to prune based on the size of the up/left `L` at `Q`.  To see how, let's look at a particular point `Q` on the diagonal and see how the result of the inner `if` statement in the loop evolves as the outer loop looks at different candidates for `P`.
 
-![Q lookup results over test points]({{baseurl}}/assets/jpg/algorithm_4.jpg)
+![Q lookup results over test points]({{ site.baseurl }}/assets/jpg/algorithm_4.jpg)
 
 Well, that's interesting!  For a given point `Q` that gets tested against a bunch of `P`s in sequence, the results follow a very predictable pattern.  For `P`s before a critical point, `Q` never makes a square because the up-left L isn't long enough.  After that critical point, `Q` makes a square with any `P` whose down-right L reaches `Q`.  (Geometrically, the critical point is the top-left corner of the square made by filling in the L at `Q`.)  So, why are we testing `Q` before that critical point?  Instead of testing every candidate `Q`, we need to limit our search to only those `Q`s that reach `P`.
 

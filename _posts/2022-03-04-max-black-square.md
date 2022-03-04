@@ -88,7 +88,7 @@ We can use these ideas to reshuffle our algorithm once again:
 ## Eliminating impossible squares
 We still haven't accomplished anything though--this algorithm is stubbornly cubic.  We haven't extracted enough structure from the problem.  We're still basically testing all `P`/`Q` pairs on a given diagonal.  We save a little time by skipping `Q` candidates that are outside the arms of `P`'s `L`, but that doesn't affect the asymptotic running time.  We also need to prune based on the size of the up/left `L` at `Q`.  To see how, let's look at a particular point `Q` on the diagonal and see how the result of the inner `if` statement in the loop evolves as the outer loop looks at different candidates for `P`.
 
-![Q lookup results over test points](/assets/jpg/algorithm_4.jpg)
+![Q lookup results over test points]({{baseurl}}/assets/jpg/algorithm_4.jpg)
 
 Well, that's interesting!  For a given point `Q` that gets tested against a bunch of `P`s in sequence, the results follow a very predictable pattern.  For `P`s before a critical point, `Q` never makes a square because the up-left L isn't long enough.  After that critical point, `Q` makes a square with any `P` whose down-right L reaches `Q`.  (Geometrically, the critical point is the top-left corner of the square made by filling in the L at `Q`.)  So, why are we testing `Q` before that critical point?  Instead of testing every candidate `Q`, we need to limit our search to only those `Q`s that reach `P`.
 

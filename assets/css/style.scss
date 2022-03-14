@@ -415,3 +415,19 @@ li.blog-entry {
 li.blog-entry > span {
   margin-right: 3em;
 }
+
+div.wrapper, section.wrapper {
+  max-width: 800px;
+}
+
+.date {
+  margin-bottom: 1em;
+}
+
+h2 {
+  margin-top: 10px;
+}
+
+.blog-date {
+  width: 105px;
+}

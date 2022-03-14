@@ -12,7 +12,9 @@ The core of our interpreter is a struct that represents the virtual machine:
 
 ```rust
 #[derive(Debug)]
-pub struct GenericIntcoder<Tape> where Tape: Index<usize, Output=Int> + IndexMut<usize> {
+pub struct GenericIntcoder<Tape> 
+    where Tape: Index<usize, Output=Int> + IndexMut<usize> 
+{
     tape: Tape,
     pub position: usize,
     relative_base: usize,
@@ -207,7 +209,7 @@ OPTIONS:
 
 ## Our First Program Run
 
-Now that we have an interpreter, we're ready write and execute a real program!  Consider the following simple program, written in LLIR, which takes an input, multiplies it by 10, and outputs the result:
+Now that we have an interpreter, we're ready to write and execute a real program!  Consider the following simple program, written in LLIR, which takes an input, multiplies it by 10, and outputs the result:
 ```
 IN &a
 IMUL #a 10

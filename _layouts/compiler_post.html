@@ -3,6 +3,7 @@ layout: default
 ---
 <a href="{{ site.baseurl }}/writing">Back to index</a>
 <h2>{{page.title}}</h2>
+<div class="date">
 {% assign d = page.date | date: "%d" | plus:'0' %}
 {% assign m = page.date | date: "%B" %}
 
@@ -18,6 +19,7 @@ layout: default
 {% else %}{{ d }}th
 {% endcase %},
 {{ page.date | date: "%Y" }}
+</div>
 
 <p>This post is part of a series. For more information and to see the other posts in the series, check out
     <a href="{{ site.baseurl }}/intcode-compiler">the main page.</a></p>

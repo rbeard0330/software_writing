@@ -1,7 +1,7 @@
 ---
 layout: post
 date: 2022-01-31
-title: "# Writing an Intcode Compiler in Rust (Part 1)"
+title: "Writing an Intcode Compiler in Rust (Part 1)"
 ---
 
 This is the first post in a series that documents my efforts to write a compiler for the Intcode language that was created for the 2019 Advent of Code event.  For more information about the goals of this project and an index of posts, see [here](/intcode-compiler).
@@ -47,7 +47,7 @@ As a toy target for a toy compiler from a toy language, the IVM has a few advant
 
 [^2]: See [here](https://fgiesen.wordpress.com/2016/08/25/how-many-x86-instructions-are-there/) for a discussion, which includes the following horrifying side note:
 
->So how many x86 instructions are there if we count distinct iforms as distinct? Turns out, an even 6000. Is that all of them? No. There are some undocumented instructions that XED doesn’t include (in addition to the several formerly undocumented instructions that Intel at some point just decided to make official). If you look at the Intel manuals, you’ll find the curious “UD2”, the defined “Undefined instruction” which is architecturally guaranteed to produce an “invalid opcode” exception. As the name suggests, it’s not the first of its kind. Its older colleague “UD1” half-exists, but not officially so. Since the semantics of UD1 are exactly the same as if it was never defined to begin with. Does a non-instruction that is non-defined and unofficially guaranteed to non-execute exactly as if it had never been in the instruction set to begin with count as an x86 instruction? For that matter, does UD2 itself, the defined undefined instruction, count as an instruction?
+  >So how many x86 instructions are there if we count distinct iforms as distinct? Turns out, an even 6000. Is that all of them? No. There are some undocumented instructions that XED doesn’t include (in addition to the several formerly undocumented instructions that Intel at some point just decided to make official). If you look at the Intel manuals, you’ll find the curious “UD2”, the defined “Undefined instruction” which is architecturally guaranteed to produce an “invalid opcode” exception. As the name suggests, it’s not the first of its kind. Its older colleague “UD1” half-exists, but not officially so. Since the semantics of UD1 are exactly the same as if it was never defined to begin with. Does a non-instruction that is non-defined and unofficially guaranteed to non-execute exactly as if it had never been in the instruction set to begin with count as an x86 instruction? For that matter, does UD2 itself, the defined undefined instruction, count as an instruction?
 
 Second, the IVM is essentially a register-based architecture, but it doesn't have any general-purpose registers.  Instead, we are limited to the `PC` and `RBP` registers, which are for program flow and memory management.  Data is loaded and stored directly from memory.  Again, this simplifies the normally hard problem of register allocation, thought it may make it harder for us to implement complex behaviors.  In essence, registers make a CPU *stateful*.  Given a particular instruction and a particular state of memory, a CPU with registers can do different things depending on the values in those registers.  To take a simple example, consider a standard function call.  After the function completes, the CPU needs to return to the call site, which means it needs to "remember" where the call site is.  In a register machine, the return address could be tucked in a register, but that won't be an option for us.  We'll need to manipulate memory in a way that saves the return address, can be found by the CPU when needed, and doesn't clobber data that will be needed later.  Much more on this in due time.
 
@@ -69,9 +69,11 @@ With these rewrites, the Intcode sample above looks like this:
 ```
 // Store input at position A
   0(03) &A 
-// Add 10 to the value in position A and store it in position A (i.e., increment position A by 10) 
+// Add 10 to the value in position A and store it in position A (i.e., 
+// increment position A by 10) 
 010(01) &A 10 &A
-// Because 1 is greater than 0, unconditionally jump to the position indicated by the second parameter (which is in position mode).  
+// Because 1 is greater than 0, unconditionally jump to the position indicated 
+// by the second parameter (which is in position mode).  
  01(05) 1 #A
 ```
 ## Our First IR
@@ -185,7 +187,8 @@ LBL  continue
 IN   &a // The JUMP instruction lands on the operand of this line of code. 
 COPY @saved_input &a // Save a copy of the input in a relative-mode location.
 IADD &a 10 // Add 10 to the input in place.
-JUMP  &#a // We can't use a label here, because the destination is computed at runtime.
+JUMP  &#a // We can't use a label here, because the destination is computed 
+          // at runtime.
 ```
 
 ## Up next

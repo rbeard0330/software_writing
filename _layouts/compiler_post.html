@@ -1,0 +1,25 @@
+---
+layout: default
+---
+<a href="{{ site.baseurl }}/writing">Back to index</a>
+<h2>{{page.title}}</h2>
+{% assign d = page.date | date: "%d" | plus:'0' %}
+{% assign m = page.date | date: "%B" %}
+
+{% case m %}
+{% when 'April' or 'May' or 'June' or 'July' %}{{ m }}
+{% when 'September' %}Sept.
+{% else %}{{ page.date | date: "%b" }}.
+{% endcase %}
+{% case d %}
+{% when 1 or 21 or 31 %}{{ d }}st
+{% when 2 or 22 %}{{ d }}nd
+{% when 3 or 23 %}{{ d }}rd
+{% else %}{{ d }}th
+{% endcase %},
+{{ page.date | date: "%Y" }}
+
+<p>This post is part of a series. For more information and to see the other posts in the series, check out
+    <a href="{{ site.baseurl }}/intcode-compiler">the main page.</a></p>
+
+{{ content }}

@@ -1,13 +1,13 @@
 ---
 layout: post
-date: 2022-03-20
+date: 2022-03-21
 title: "Cracking Cracking the Coding Interview, Part 2"
 ---
 
 Consider the following problem from *Cracking the Coding Interview* by Gayle Laakman McDowell:
 
 > **4.10 Check Subtree:** T1 and T2 are very large binary trees, with T1 much bigger than T2.  Create an algorithm to determine if T2 is a subtree of T1.
-> 
+>
 > A tree T2 is a subtree of T1 if there exists a node n in T1 such that the subtree of n is identical to T2.  That is, if you cut off the tree at node n, the two trees would be identical.
 
 The book offers two solutions:
@@ -21,7 +21,7 @@ Despite the fact that McDowell views the string search approach as the simpler a
 
 ## The weakness of Root-Match-Search
 
-The first thing to note is that the distinction between Root-Match Search and fully naive brute-force search where you invoke the subtree-matching routine on each node is actually just a matter of presentation.  To see this, consider what happens when you run the naive algorithm.  Say that the root value of T2 is `0`.  When wise Root-Match Search encounters a node `n` with a value of `1`, it compares `1` to `0`, realizes that they're different, and cleverly moves on to the next node in the traversal.  When large-adult-algorithm-son naive brute-force search encounters the same node, it just blindly invokes its subtree matching algorithm, like an idiot.  As a result, the subtree matching algorithm...compares the actual node value of `1` with the expected value of `0` and immediately terminates.  Huh. 
+The first thing to note is that the distinction between Root-Match Search and fully naive brute-force search where you invoke the subtree-matching routine on each node is actually just a matter of presentation.  To see this, consider what happens when you run the naive algorithm.  Say that the root value of T2 is `0`.  When wise Root-Match Search encounters a node `n` with a value of `1`, it compares `1` to `0`, realizes that they're different, and cleverly moves on to the next node in the traversal.  When large-adult-algorithm-son naive brute-force search encounters the same node, it just blindly invokes its subtree matching algorithm, like an idiot.  As a result, the subtree matching algorithm...compares the actual node value of `1` with the expected value of `0` and immediately terminates.  Huh.
 
 Let's consider the situations where RMS struggles.  The worst case situation would be one where all the values in the tree are identical, and we're just matching the structure of the two trees.  The reason this is so bad for RMS is that every node matches the root, and we have to resort a full subtree-matching process on each node we see.  What's going on here is that the tree contains both node values and structure, and we're only considering node values (more precisely, the root node value) when we decide which nodes in T1 could be the root of a T2 subtree.
 
@@ -30,11 +30,11 @@ We need a better screening process.  While the value stored at a potential root 
 2. The value at the root of the subtree encodes nothing whatsoever about the structure of the subtree.
 3. The full-match attempts that are screened out by root value checks are precisely the ones that don't matter to our runtime, because they terminate immediately.
 
-Items 1 and 2 are crucial for a nonobvious reason.  If we start a full-match attempt at `n` because `n`'s value matched the root, we learn almost nothing if that full-match attempt fails.  In particular, **we still need to consider `n`'s descendants.**  This fact is what dooms us to an O(mn) runtime--we can do up to `m` work in a full-match attempt at a particular node, and all it tells us is that that specific node is not the root we're looking for.  We can end up looking at the same node over and over against as an element of many different subtrees.  We need to eliminate that possibility to make progress.     
+Items 1 and 2 are crucial for a nonobvious reason.  If we start a full-match attempt at `n` because `n`'s value matched the root, we learn almost nothing if that full-match attempt fails.  In particular, **we still need to consider `n`'s descendants.**  This fact is what dooms us to an O(mn) runtime--we can do up to `m` work in a full-match attempt at a particular node, and all it tells us is that that specific node is not the root we're looking for.  We can end up looking at the same node over and over against as an element of many different subtrees.  We need to eliminate that possibility to make progress.
 
 ## Screening on whole-subtree properties
 
-We need a richer metric to tell us which nodes to investigate as potential T2 roots.  In particular, we need statistics about the complete subtree rooted at each node `n` *before* we decide to do a full investigation of that node.
+The key to avoiding duplicative work is identifying a richer metric that can tell us which nodes to investigate as potential T2 roots.  In particular, we need statistics about the complete subtree rooted at each node `n` *before* we decide to do a full investigation of that node.
 
 ...
 
@@ -108,7 +108,7 @@ def find_matching_subtree(t1, t2, t2_height):
 
 The big cost here is a meaningful hit to code clarity--`compute_height_and_trigger_searches` just openly confesses to crimes against the single responsibility principle.  The appearance of the rarely seen `nonlocal` keyword is another red flag.[^2]  The basic problem is that the recursive calls need to return two totally different pieces of information.  In addition to returning the heights of the subtrees, we also need to communicate the results of our match attempts.  There's no perfectly elegant solution in Python[^3], but opening a side channel in the form of the `match_found` variable is a workable, if flawed, answer.
 
-[^2]: For any virtuous souls who avoid writing code that needs to know about it, `nonlocal` is needed because we're modifying a variable that lives outside the local scope of the `compute_height_and_trigger_searches` function. The normal rule in Python is that a function can access such variables (including calling mutating methods), but can't reassign them.  The `nonlocal` keyword tells Python that we've decided to violate that rule. 
+[^2]: For any virtuous souls who avoid writing code that needs to know about it, `nonlocal` is needed because we're modifying a variable that lives outside the local scope of the `compute_height_and_trigger_searches` function. The normal rule in Python is that a function can access such variables (including calling mutating methods), but can't reassign them.  The `nonlocal` keyword tells Python that we've decided to violate that rule.
 
 [^3]: In a language with algebraic data types, it would probably be better to return a sum type with two variants (`SearchResult` vs `SubtreeHeight`), since we never actually need to return both types of information from the same call.  We could emulate this in Python by return a Golang-y tuple consisting of a tag for the kind of result and the actual value if we chose, but that feels messier to me.
 

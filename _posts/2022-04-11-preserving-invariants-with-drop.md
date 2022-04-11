@@ -6,7 +6,7 @@ title: "Preserving Invariants in Rust with Drop"
 
 Data structures can be divided into two categories, which I'll call *naive* and *aware* data structures (nonstandard terminology).  Naive data structures don't need to know anything about the data items they store.  As an example, consider the items in an array.  An array doesn't really care whether it's sorting integers, strings, other arrays, or complex objects.  All it needs to know is how much space a single item occupies, and then it can do its work by blindly moving appropriately sized groups of bytes around.  By contrast, an aware data structure needs to interact with the items it contains to function correctly.  Consider a binary search tree.  In order to determine where to store a particular item, the BST needs objects that can be compared with one another to produce a total ordering.
 
-## Change can be hard
+### Change can be hard
 
 A difficult problem in the design of an aware data structure is whether and how to allow users of the structure to modify contained objects in place.  Hash tables, for example, are naive as to the values stored in the table, but aware as to the keys, which must be hashable in a stable way over their lifetimes.  To deal with this fact, Python's `dict`s require keys (but not values) to be "hashable."  In practice, only immutable Python primitives are hashable, and mutable user types that declare themselves hashable are responsible for ensuring that any mutations do not disrupt the hash-stability invariant.
 
@@ -20,7 +20,7 @@ Another solution is to restrict clients' access to stored data to specified oper
 
 While this solution is simple and hygenic, it's also somewhat limiting.  In particular, what happens if a heap item's key is not an independent property, but rather is derived from the other properties of the object?  For example, imagine that you're sending shipments of bulk commodities from a warehouse, and you want to dispatch the most valuable shipment first.  To manage this task, you might create a `Shipment` object with `commodity_value` and `shipment_size` attributes, and a custom property `shipment_value` that returns the product of those two attributes.  You'd like to store your `Shipments` in a max-heap, keyed by `shipment_value`, so that you can just pop a `Shipment` off the heap whenever a train is getting ready to leave.  But what happens now if rats eat half of a shipment of grain and you need to modify the `shipment_size` of the affected `Shipment` object, which is already in the heap?  A generic heap can't reasonably be expected to expose a method to modify your idiosyncratic objects.  You may have no better solution than to fall back to the unsatisfactory approach of removal, modification and reinsertion.
 
-## A simple sample heap
+### A simple sample heap
 
 I recently came across a rather elegant solution to this problem in Rust.  Consider the following `Heap` struct:
 
@@ -68,7 +68,7 @@ impl<T: HeapItem> Heap<T> {
 ```
 This isn't entirely terrible, but we're pretty much giving up on having real confidence in the correctness of this heap.  It's simply not reasonable to expect that your users will always remember to call the fix-up method after they modify the data.  They *should*, but they just won't, at least not always.
 
-## Smart pointers for smart people
+### Smart pointers for smart people
 
 Here's where the compiler can be drafted to help us out.  Our problem is that we want to let users modify their data directly, but we need to fix any problems they cause *after* they finish their modifications, but *before* any other user accesses the data structure.  Conveniently, that's (roughly--more on this later) when destructors are run!
 
@@ -181,7 +181,7 @@ Our fix-up code was automagically inserted right after the data was modified!  M
 
 The aliasing rules ensure that no client can ever see the heap in an invalid state.
 
-## The not so pretty parts
+### The not so pretty parts
 The explanation about the aliasing rules above is technically correct, but it oversimplifies things.  The problem is that destructors are *not* run at the end of an object's lifetime.  Instead, they run when the object goes out of scope. This is a blunter analysis than what the borrow checker uses to delineate reference lifetimes.  The following code compiles fine:
 
 ```rust

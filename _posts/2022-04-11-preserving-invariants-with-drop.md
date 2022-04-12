@@ -4,7 +4,7 @@ date: 2022-04-11
 title: "Preserving Invariants in Rust with Drop"
 ---
 
-Data structures can be divided into two categories, which I'll call *naive* and *aware* data structures (nonstandard terminology).  Naive data structures don't need to know anything about the data items they store.  As an example, consider the items in an array.  An array doesn't really care whether it's sorting integers, strings, other arrays, or complex objects.  All it needs to know is how much space a single item occupies, and then it can do its work by blindly moving appropriately sized groups of bytes around.  By contrast, an aware data structure needs to interact with the items it contains to function correctly.  Consider a binary search tree.  In order to determine where to store a particular item, the BST needs objects that can be compared with one another to produce a total ordering.
+Data structures can be divided into two categories, which I'll call *naive* and *aware* data structures (not standard terminology).  Naive data structures don't need to know anything about the data items they store.  As an example, consider the items in an array.  An array doesn't really care whether it's storing integers, strings, other arrays, or complex objects.  All it needs to know is how much space a single item occupies, and then it can do its work by blindly moving appropriately sized groups of bytes around.  By contrast, an aware data structure needs to interact with the items it contains to function correctly.  Consider a binary search tree.  In order to determine where to store a particular item, the BST needs objects that can be compared with one another to produce a total ordering.
 
 ### Change can be hard
 
@@ -129,7 +129,7 @@ impl<'a, T: HeapItem> Drop for HeapItemRefMut<'a, T> {
 We're completely indifferent to what the client did to the object.  All we need to do is check whether its key or id changed and make the appropriate changes if they did.  And most importantly, *the client can't forget to restore the invariants*!  They don't even need to worry about it.  That lets us have code like this:
 ```rust
 #[derive(Clone, Debug)]
-struct Job{
+struct Job {
     priority: i64,
     id: i64,
     description: String

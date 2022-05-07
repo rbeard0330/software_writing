@@ -42,15 +42,14 @@ Everything I write here will be posted on [GitHub](https://github.com/rbeard0330
 If we're doing our jobs as engineers well, our understanding of the problem will evolve as we start to design and implement a solution.  That means that any detailed schedule is going to evolve and change as I actually write these posts.  With that caveat, see below for my *best guess* about how this project plays out.  As the posts get written, this index will be updated with links and to reflect any changes in our plans.
 1. [Introducing the IVM and designing Low-Level IR (LLIR) v1](/2022-01-31-intcode-compiler-in-rust-1.md)
 2. [Building an IVM runtime](/2022-02-10-intcode-compiler-in-rust-2.md)
-3. Emitting Intcode from LLIR v1
-4. Introducing C-- (our toy source language)
-5. Variables and LLIR v2
-6. Procedure calls, Part I
-7. Procedure calls, Part II and LLIR v3
-8. Control flow and designing Graphical IR (GIR) v1
-9. Parsing C-- into GIR v1
-10. Our first end-to-end (nonoptimizing) compiler
-11. Introduction to optimizations
-12. \[A few posts on optimization]
-13. Extending C-- with arrays
-14. Extending C-- with structs
+3. [Emitting Intcode from LLIR v1](/2022-05-07-intcode-compiler-in-rust-3.md)
+4. Variables and procedure calls, Part I
+5. Variables and procedure calls, Part II and LLIR v2 
+6. Introducing C-- (our toy source language)
+7. Control flow and designing Graphical IR (GIR) v1
+8. Parsing C-- into GIR v1
+9. Our first end-to-end (nonoptimizing) compiler
+10. Introduction to optimizations
+11. \[A few posts on optimization]
+12. Extending C-- with arrays
+13. Extending C-- with structs
